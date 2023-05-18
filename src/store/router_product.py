@@ -7,14 +7,13 @@ from store.models import Product, Category
 from store.schemas import ProductSchema
 
 router = APIRouter(
-    prefix='/products',
-    tags=['Store']
+    tags=['Product']
 )
 
 
-@router.post('/')
-async def add_product(new_task: ProductSchema, session: AsyncSession = Depends(get_async_session)):
-    stmt = insert(Product).values(**new_task.dict())
+@router.post('product/add_product')
+async def add_product(new_product: ProductSchema, session: AsyncSession = Depends(get_async_session)):
+    stmt = insert(Product).values(**new_product.dict())
     await session.execute(stmt)
     await session.commit()
     return {"status": "success"}
@@ -23,5 +22,13 @@ async def add_product(new_task: ProductSchema, session: AsyncSession = Depends(g
 @router.get('/products')
 async def get_products(session: AsyncSession = Depends(get_async_session)):
     query = select(Product)
+    result = await session.execute(query)
+    return result.scalars().all()
+
+
+@router.get('/{category_name}/products')
+async def get_products_by_category(category_name: str,
+                                   session: AsyncSession = Depends(get_async_session)):
+    query = select(Product).join(Category).where(Category.title == category_name)
     result = await session.execute(query)
     return result.scalars().all()

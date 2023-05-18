@@ -3,7 +3,8 @@ from fastapi import FastAPI
 from auth.base_config import auth_backend
 from auth.schemas import UserRead, UserCreate
 from utils import fastapi_users
-from store.router import router as router_store
+from store.router_product import router as router_product
+from store.router_category import router as router_category
 
 app = FastAPI()
 
@@ -19,4 +20,6 @@ app.include_router(
     tags=["auth"],
 )
 
-app.include_router(router_store)
+app.include_router(router_product)
+
+app.include_router(router_category)
