@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.post('product/add_product')
+@router.post('/product/add_product')
 async def add_product(new_product: ProductSchema, session: AsyncSession = Depends(get_async_session)):
     stmt = insert(Product).values(**new_product.dict())
     await session.execute(stmt)
@@ -43,7 +43,7 @@ async def product_detail(id: int, session: AsyncSession = Depends(get_async_sess
 
 @router.get('/search')
 async def search(query: str, session: AsyncSession = Depends(get_async_session)):
-    query_search = select(Product).filter(or_(Product.name.contains(query), Product.description.contains(query)))
+    query_search = select(Product).where(or_(Product.name.contains(query), Product.description.contains(query)))
     print(query_search)
     result = await session.execute(query_search)
     return result.scalars().all()

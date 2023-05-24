@@ -1,5 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, TIMESTAMP, ForeignKey
+from sqlalchemy.orm import relationship
 
 from database import Base
 
@@ -21,3 +22,4 @@ class Product(Base):
     quantity = Column(Integer, nullable=False)
     published_at = Column(TIMESTAMP, default=datetime.utcnow)
     category_id = Column(Integer, ForeignKey('category.category_id'))
+    cart = relationship('Cart')

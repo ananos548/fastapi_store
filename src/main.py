@@ -5,8 +5,10 @@ from auth.schemas import UserRead, UserCreate
 from utils import fastapi_users
 from store.router_product import router as router_product
 from store.router_category import router as router_category
+from cart.router import router as router_cart
 
 app = FastAPI()
+
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -23,3 +25,5 @@ app.include_router(
 app.include_router(router_product)
 
 app.include_router(router_category)
+
+app.include_router(router_cart)
